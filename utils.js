@@ -69,8 +69,12 @@ window.setRadio = (name, value) => {
 window.setCheckboxBySelector = (selector, checked) => {
   const el = document.querySelector(selector);
   if (el) {
-    el.checked = checked;
-    el.dispatchEvent(new Event("change", { bubbles: true }));
+    if (el.checked !== checked) {
+      el.checked = checked;
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.click(); // 🧠 important for UI to reflect change in some custom setups
+    }
   } else {
     console.warn("Checkbox not found:", selector);
   }
