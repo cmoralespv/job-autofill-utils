@@ -74,10 +74,19 @@ window.setCheckboxBySelector = (selector, checked) => {
   const wrapper = el.parentElement;
   if (wrapper) {
     if (el.checked !== checked) {
-      wrapper.click(); // Simulate user click to toggle + trigger UI behavior
+      
       el.checked = checked;
-      el.dispatchEvent(new Event("change", { bubbles: true }));
+      // Dispatch standard input/change events to ensure frameworks pick it up
       el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+      
+      ['mousedown', 'mouseup', 'click'].forEach(eventType => {
+        wrapper.dispatchEvent(new MouseEvent(eventType, {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        }));
+      });
     }
   } else {
     console.warn("Checkbox wrapper not found:", selector);
