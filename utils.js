@@ -68,28 +68,13 @@ window.setRadio = (name, value) => {
  */
 window.setCheckboxBySelector = (selector, checked) => {
   const el = document.querySelector(selector);
-
-  if (!el) return console.warn("Checkbox not found:", selector);
-
-  const wrapper = el.parentElement;
-  if (wrapper) {
+  
+  if (el) {
     if (el.checked !== checked) {
-      
-      el.checked = checked;
-      // Dispatch standard input/change events to ensure frameworks pick it up
-      el.dispatchEvent(new Event("input", { bubbles: true }));
-      el.dispatchEvent(new Event("change", { bubbles: true }));
-      
-      ['mousedown', 'mouseup', 'click'].forEach(eventType => {
-        wrapper.dispatchEvent(new MouseEvent(eventType, {
-          bubbles: true,
-          cancelable: true,
-          view: window
-        }));
-      });
+      el.click();
     }
   } else {
-    console.warn("Checkbox wrapper not found:", selector);
+    console.warn("Checkbox not found:", selector);
   }
 };
 
