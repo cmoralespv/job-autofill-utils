@@ -13,6 +13,7 @@ window.fillInputBySelector = (selector, value, container = document) => {
     el.dispatchEvent(new Event("change", { bubbles: true }));
   } else {
     console.warn("Input not found:", selector);
+  }
 };
 
 /**
