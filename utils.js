@@ -20,8 +20,8 @@ window.fillInputBySelector = (selector, value, container = document) => {
  * @param {string} name - The name attribute of the input.
  * @param {string} value - The value to set.
  */
-window.fillInputByName = (name, value) => {
-  window.fillInputBySelector(`input[name="${name}"]`, value);
+window.fillInputByName = (name, value, container = document) => {
+  window.fillInputBySelector(`input[name="${name}"]`, value, container);
 };
 
 /**
