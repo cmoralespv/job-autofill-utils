@@ -21,7 +21,7 @@ window.fillInputBySelector = (selector, value) => {
  * @param {string} value - The value to set.
  */
 window.fillInputByName = (name, value) => {
-  fillInputBySelector(`input[name="${name}"]`, value);
+  window.fillInputBySelector(`input[name="${name}"]`, value);
 };
 
 /**
@@ -84,7 +84,7 @@ window.setCheckboxBySelector = (selector, checked) => {
  * @param {boolean} checked - Whether the checkbox should be checked.
  */
 window.setCheckboxByName = (name, checked) => {
-  setCheckboxBySelector(`input[name="${name}"]`, checked);
+  window.setCheckboxBySelector(`input[name="${name}"]`, checked);
 };
 
 /**
