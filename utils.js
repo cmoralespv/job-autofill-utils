@@ -67,16 +67,18 @@ window.setRadio = (name, value) => {
  * @param {boolean} checked - Whether the checkbox should be checked.
  */
 window.setCheckboxBySelector = (selector, checked) => {
-  const el = document.querySelector(selector);
+  setTimeout(() => {
+    const el = document.querySelector(selector);
   
-  if (el) {
-    if (el.checked !== checked) {
-      el.click();
+    if (el) {
+      if (el.checked !== checked) {
+        el.click();
+        console.log("Checkbox clicked programmatically.");
     }
   } else {
     console.warn("Checkbox not found:", selector);
   }
-};
+}, 2000);
 
 /**
  * Sets the checked state of a checkbox using its name attribute.
