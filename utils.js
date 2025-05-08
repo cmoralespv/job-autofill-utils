@@ -94,6 +94,7 @@ window.setCheckboxByName = (name, checked) => {
 window.clickButton = (selector) => {
   const btn = document.querySelector(selector);
   if (btn) btn.click();
+  else console.warn("Button not found:", selector);
 };
 
 /**
