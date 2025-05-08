@@ -57,12 +57,8 @@ window.selectDropdownByLabel = (buttonSelector, labelToMatch, optionSelector = '
  */
 window.setRadio = (name, value) => {
   const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
-  if (el) {
-    el.click();
-    console.warn("Radio clicked programtically");
-  } else {
-    console.warn("Radio not found:", name, value);
-  }
+    if (el) el.click();
+    else console.warn("Radio not found:", name, value);
 };
 
 /**
