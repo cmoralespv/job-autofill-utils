@@ -8,7 +8,6 @@ window.fillInputBySelector = (selector, value, container = document) => {
   const el = container.querySelector(selector);
   if (el) {
     el.focus();
-    el.click();
     el.value = value;
     el.dispatchEvent(new Event("input", { bubbles: true }));
     el.dispatchEvent(new Event("change", { bubbles: true }));
