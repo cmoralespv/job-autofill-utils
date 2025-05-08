@@ -11,6 +11,8 @@ window.fillInputBySelector = (selector, value, container = document) => {
     el.value = value;
     el.dispatchEvent(new Event("input", { bubbles: true }));
     el.dispatchEvent(new Event("change", { bubbles: true }));
+    el.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true }));
+    el.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true }));
   } else {
     console.warn("Input not found:", selector);
   }
