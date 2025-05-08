@@ -10,7 +10,7 @@ window.fillInputBySelector = (selector, value) => {
     el.focus();
     el.value = value;
     el.dispatchEvent(new Event("input", { bubbles: true }));
-  } else {
+    el.dispatchEvent(new Event("change", { bubbles: true }));
     console.warn("Input not found:", selector);
   }
 };
