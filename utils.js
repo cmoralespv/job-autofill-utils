@@ -4,8 +4,8 @@
  * @param {string} selector - The CSS selector targeting the input element.
  * @param {string} value - The value to set in the input field.
  */
-window.fillInputBySelector = (selector, value) => {
-  const el = document.querySelector(selector);
+window.fillInputBySelector = (selector, value, container = document) => {
+  const el = container.querySelector(selector);
   if (el) {
     el.focus();
     el.value = value;
