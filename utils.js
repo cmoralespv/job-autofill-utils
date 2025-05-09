@@ -96,7 +96,7 @@ window.selectByTypingFromDropdown = async (
 
   const candidates = [labelToMatch, ...aliases]
 
-  for (const candiate of candidates {
+  for (const candiate of candidates) {
     trigger.value = candidate;
     trigger.dispatchEvent(new Event("input", {bubbles: true }));
 
