@@ -31,7 +31,7 @@ window.fillInputByName = (name, value, container = document) => {
  * @param {string} labelToMatch - Visible text of the option to select.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
-window.selectDropdownByLabel = (buttonSelector, labelToMatch, optionSelector = '[role="option"]', container = document) => {
+window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = document, optionSelector = '[role="option"]') => {
   const button = container.querySelector(buttonSelector);
   if (!button) {
     console.warn("Dropdown button not found:", buttonSelector);
