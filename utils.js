@@ -101,7 +101,7 @@ window.selectByTypingFromDropdown = async (
     trigger.value = candidate;
     trigger.dispatchEvent(new Event("input", {bubbles: true }));
 
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // fetch and normalize options from full document scope
     const options = Array.from(document.querySelectorAll(optionSelector));
