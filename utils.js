@@ -68,11 +68,11 @@ window.setRadio = (name, value) => {
  * @param {boolean} checked - Whether the checkbox should be checked.
  */
 window.setCheckboxBySelector = (selector, checked) => {
-    const el = document.querySelector(selector);
-    if (el) {
-      if (el.checked !== checked) {
-        el.click();
-        console.log("Checkbox clicked programmatically.");
+  const el = document.querySelector(selector);
+  if (el) {
+    if (el.checked !== checked) {
+      el.click();
+      console.log("Checkbox clicked programmatically.");
     }
   } else {
     console.warn("Checkbox not found:", selector);
@@ -87,6 +87,28 @@ window.setCheckboxBySelector = (selector, checked) => {
 window.setCheckboxByName = (name, checked) => {
   window.setCheckboxBySelector(`input[name="${name}"]`, checked);
 };
+
+/**
+ * Sets the value of an input element programmatically in a way that simulates user input.
+ * This ensures compatibility with frameworks like React that rely on synthetic events.
+ *
+ * @param {HTMLInputElement} el - The input element to modify.
+ * @param {string} value - The value to assign to the input element.
+ * @returns {Promise<void>} Resolves once the value has been set and events dispatched.
+ */
+window.dateSetValue = async (el, value) => {
+  if (!el) return;
+
+  const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+  if (!nativeSetter) return;
+
+  el.focus();
+  nativeSetter.call(el, value);
+  el.dispatchEvent(new InputEvent('input', { bubbles: true }));
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+};
+
+// BEHAVIOR FUNCTIONS
 
 /**
  * Clicks a button using a CSS selector.
@@ -104,3 +126,43 @@ window.clickButton = (selector) => {
  * @returns {Promise<void>} Promise that resolves after the delay.
  */
 window.delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+  * Waits for an element to be available in the DOM.
+  * @param {string} selector - CSS selector for the desired element.
+  * @param {number} timeout - Max wait time in ms.
+  * @returns {Promise<Element>} - Resolves with the element or rejects if timeout.
+  */
+window.waitForElement = (selector, timeout = 5000) => {
+  return new Promise((resolve, reject) => {
+  const start = Date.now();
+  const interval = setInterval(() => {
+      const el = document.querySelector(selector);
+      if (el) {
+        clearInterval(interval);
+        resolve(el);
+      } else if (Date.now() - start > timeout) {
+        clearInterval(interval);
+        reject(new Error(`Timeout: Element not found: ${selector}`));
+      }
+    }, 100);
+  });
+}
+
+/**
+ * Simulates a click on a neutral part of the screen to dismiss open dropdowns or overlays.
+ * Useful when custom dropdowns stay open after selection.
+ */
+window.clickAway = () => {
+  setTimeout(() => {
+      // Try clicking the body or a neutral container to force blur
+      const backdrop = document.body || document.querySelector('div');
+      if (backdrop) {
+          backdrop.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+          backdrop.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+          backdrop.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      }
+  }, 500);
+};
+
+
