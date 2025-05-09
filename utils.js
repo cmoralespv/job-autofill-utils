@@ -58,11 +58,8 @@ window.selectFromDropdownOption = async (
   }
   
   // fetch and normalize options from full document scope
-  const options = Array.from(document.querySelectorAll(optionSelector))
-    .filter(opt => {
-    const style = window.getComputedStyle(opt);
-    return style.display !== 'none' && style.visibility !== 'hidden' && opt.offsetParent !== null;
-  });
+  const dropdownContainer = getMostRecentDropdownContainer(); // you'd write this
+  const options = Array.from(dropdownContainer.querySelectorAll(optionSelector));
   console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
 
   // direct match
@@ -148,6 +145,19 @@ findMatchingOption = (options, labelToMatch, aliases = []) => {
   }
 
   return match || null;
+}
+
+/**
+ * Returns the most recently opened dropdown container (typically a floating menu with role="listbox").
+ * Assumes the most recently added matching element is the active one.
+ * @returns {Element|null} The container DOM element, or null if not found.
+ */
+getActiveDropdownContainer = () => {
+  const listboxes = Array.from(document.querySelectorAll('[role="listbox"]'));
+  if (listboxes.length === 0) return null;
+
+  // Return the last one in the DOM (most recently appended)
+  return listboxes[listboxes.length - 1];
 }
 
 /**
