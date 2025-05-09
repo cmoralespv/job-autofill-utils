@@ -114,7 +114,7 @@ window.selectByTypingFromDropdown = async (
       return;
     }
   }
-  console.warn("Option not found in large menu:", labelToMatch, "Aliases tried:", aliases);
+  console.warn("Option not found in large menu:", labelToMatch, "Candidates tried:", candidates);
 };
 
 /**
