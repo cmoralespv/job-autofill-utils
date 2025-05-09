@@ -42,7 +42,7 @@ window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = docume
   button.click();
   setTimeout(() => {
     const options = Array.from(container.querySelectorAll(optionSelector));
-    const normalizedLabel = label.trim().toLowerCase();
+    const normalizedLabel = labelToMatch.trim().toLowerCase();
 
     // direct match
     let match = options.find(opt =>
