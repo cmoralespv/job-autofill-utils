@@ -113,11 +113,11 @@ window.selectFromLargeMenuOption = async (
 
     scrollContainer.scrollTop += 200;
     await new Promise(resolve => setTimeout(resolve, 300));
-  }
 
-  // stop early if we're already at the bottom
-  if (scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight) {
-    break;
+    // stop early if we're already at the bottom
+    if (scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight) {
+      break;
+    }
   }
 
   console.warn("Option not found in large menu:", labelToMatch, "Aliases tried:", aliases);
