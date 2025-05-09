@@ -78,15 +78,13 @@ window.selectFromDropDownOption = async (
  * @param {Element} [container=document] - Optional DOM container to scope searches.
  * @param {string[]} [aliases=[]] - Optional list of aliases to match against.
  * @param {string} [optionSelector='[data-automation-id="promptOption"]'] - Selector for menu options.
- * @param {number} [maxScrollAttempts=20] - How many times to scroll to search for the option.
  */
-window.selectFromLargeMenuOption = async (
+window.searchFromDropDownOption = async (
   triggerSelector,
   labelToMatch,
   container = document,
   aliases = [],
-  optionSelector = '[data-automation-id="promptOption"]',
-  maxScrollAttempts = 20
+  optionSelector = '[data-automation-id="promptOption"]'
 ) => {
   const trigger = container.querySelector(triggerSelector);
   if (!trigger) {
@@ -96,30 +94,25 @@ window.selectFromLargeMenuOption = async (
 
   trigger.click();
 
-  const scrollContainer = document.querySelector('[role="listbox"]');
-  if (!scrollContainer) {
-    console.warn("Scrollable menu container not found.");
-    return;
-  }
+  const candidates = [labelToMatch, ...aliases]
 
-  for (let attempt = 0; attempt < maxScrollAttempts; attempt++) {
-    const options = Array.from(scrollContainer.querySelectorAll(optionSelector));
-    const match = findMatchingOption(options, labelToMatch, aliases);
+  for (const candiate of candidates {
+    trigger.value = candidate;
+    trigger.dispatchEvent(new Event("input", {bubbles: true }));
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // fetch and normalize options from full document scope
+    const options = Array.from(document.querySelectorAll(optionSelector));
+    console.log("Large Menu options found:", options.map(o => o.textContent.trim()));
+
+    const match = options.find(opt => opt.textContent.trim().toLowerCase() === candidate.trim().toLowerCase());
 
     if (match) {
       match.click();
       return;
     }
-
-    scrollContainer.scrollTop += 200;
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    // stop early if we're already at the bottom
-    if (scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight) {
-      break;
-    }
   }
-
   console.warn("Option not found in large menu:", labelToMatch, "Aliases tried:", aliases);
 };
 
