@@ -104,7 +104,7 @@ window.selectFromLargeMenuOption = async (
 
   for (let attempt = 0; attempt < maxScrollAttempts; attempt++) {
     const options = Array.from(scrollContainer.querySelectorAll(optionSelector));
-    const match = findMatchingOption(options, normalizedLabel, aliases);
+    const match = findMatchingOption(options, labelToMatch, aliases);
 
     if (match) {
       match.click();
