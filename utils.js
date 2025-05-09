@@ -30,7 +30,7 @@ window.fillInputByName = (name, value, container = document) => {
  * @param {string} buttonSelector - Selector for the button that opens the dropdown.
  * @param {string} labelToMatch - Visible text of the option to match.
  * @param {Element} [container=document] - Optional container within which to search.
- * @param {string[]} [aliases=[]] - List of alias strings.
+ * @param {string[]} [aliases=[]] - Optional list of alias strings.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
 window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = document, aliases = [], optionSelector = '[role="option"]') => {
@@ -49,7 +49,7 @@ window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = docume
       opt.textContent.trim().toLowerCase() === normalizedLabel
     );
 
-    // in no direct match, try aliases
+    // if no direct match, try aliases
     if (!match && Array.isArray(aliases)) {
       for (const alias of aliases) {
         const normalizedAlias = alias.trim().toLowerCase();
