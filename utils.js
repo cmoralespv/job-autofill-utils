@@ -101,20 +101,18 @@ window.selectByTypingFromDropdown = async (
     trigger.value = candidate;
     trigger.dispatchEvent(new Event("input", {bubbles: true }));
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 300));
 
-    // fetch and normalize options from full document scope
-    const options = Array.from(document.querySelectorAll(optionSelector));
-    console.log("Large Menu options found:", options.map(o => o.textContent.trim()));
+    // Press Enter to confirm selection
+    trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    trigger.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true }));
 
-    const match = options.find(opt => opt.textContent.trim().toLowerCase() === candidate.trim().toLowerCase());
+    await new Promise(resolve => setTimeout(resolve, 300));
 
-    if (match) {
-      match.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      match.focus();
-      await new Promise(r => setTimeout(r, 100));
-      match.click();
-      return;
+    // confirm selection: check the visible selected value
+    const selectedLabel = container.querySelector('[data-automation-id="promptAriaInstruction"]');
+    if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
+      return; // Match was successful
     }
   }
   console.warn("Option not found in large menu:", labelToMatch, "Candidates tried:", candidates);
