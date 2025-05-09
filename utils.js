@@ -58,7 +58,11 @@ window.selectFromDropdownOption = async (
   }
   
   // fetch and normalize options from full document scope
-  const options = Array.from(document.querySelectorAll(optionSelector));
+  const options = Array.from(document.querySelectorAll(optionSelector))
+    .filter(opt => {
+    const style = window.getComputedStyle(opt);
+    return style.display !== 'none' && style.visibility !== 'hidden' && opt.offsetParent !== null;
+  });
   console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
 
   // direct match
@@ -114,8 +118,8 @@ window.selectByTypingFromDropdown = async (
     if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
       return; // Match was successful
     }
+    console.warn("Option not found in large menu:", labelToMatch, "Candidate tried:", candidate);
   }
-  console.warn("Option not found in large menu:", labelToMatch, "Candidates tried:", candidates);
 };
 
 /**
