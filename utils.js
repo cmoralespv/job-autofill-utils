@@ -58,8 +58,12 @@ window.selectFromDropdownOption = async (
   }
   
   // fetch and normalize options from full document scope
-  const dropdownContainer = getMostRecentDropdownContainer(); // you'd write this
-  const options = Array.from(dropdownContainer.querySelectorAll(optionSelector));
+  const activeDropdown = getActiveDropdownContainer();
+  if (!activeDropdown) {
+    console.warn("⚠️ No active dropdown container found.");
+    return;
+  }
+  const options = Array.from(activeDropdown.querySelectorAll(optionSelector));
   console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
 
   // direct match
