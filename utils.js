@@ -80,7 +80,7 @@ window.selectFromDropDownOption = async (
  * @param {string} [optionSelector='[data-automation-id="promptOption"]'] - Selector for menu options.
  * @param {number} [maxScrollAttempts=20] - How many times to scroll to search for the option.
  */
-window.selectLargeMenuOption = async (
+window.selectFromLargeMenuOption = async (
   triggerSelector,
   labelToMatch,
   container = document,
