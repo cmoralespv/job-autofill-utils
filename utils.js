@@ -72,6 +72,54 @@ window.selectFromDropDownOption = async (
 };
 
 /**
+ * Scrolls through a virtualized menu and selects the matching option using direct or alias-based matching.
+ * @param {string} triggerSelector - Selector to open the menu (input or button).
+ * @param {string} labelToMatch - Label you want to match exactly.
+ * @param {Element} [container=document] - Optional DOM container to scope searches.
+ * @param {string[]} [aliases=[]] - Optional list of aliases to match against.
+ * @param {string} [optionSelector='[data-automation-id="promptOption"]'] - Selector for menu options.
+ * @param {number} [maxScrollAttempts=20] - How many times to scroll to search for the option.
+ */
+window.selectLargeMenuOption = async (
+  triggerSelector,
+  labelToMatch,
+  container = document,
+  aliases = [],
+  optionSelector = '[data-automation-id="promptOption"]',
+  maxScrollAttempts = 20
+) => {
+  const trigger = container.querySelector(triggerSelector);
+  if (!trigger) {
+    console.warn("Menu trigger not found:", triggerSelector);
+    return;
+  }
+
+  trigger.click();
+
+  const normalizedLabel = labelToMatch.trim().toLowerCase();
+  const scrollContainer = document.querySelector('[data-automation-id="activeListContainer"][role="listbox"]');
+  if (!scrollContainer) {
+    console.warn("Scrollable menu container not found.");
+    return;
+  }
+
+  for (let attempt = 0; attempt < maxScrollAttempts; attempt++) {
+    const options = Array.from(scrollContainer.querySelectorAll(optionSelector));
+    const match = findMatchingOption(options, normalizedLabel, aliases);
+
+    if (match) {
+      match.click();
+      return;
+    }
+
+    scrollContainer.scrollTop += 200;
+    await new Promise(resolve => setTimeout(resolve, 300));
+  }
+
+  console.warn("Option not found in large menu:", labelToMatch, "Aliases tried:", aliases);
+};
+
+/**
  * Finds a matching option based on exact label or aliases.
  * @param {Element[]} options - The list of <option>-like elements to search.
  * @param {string} labelToMatch - The main label.
