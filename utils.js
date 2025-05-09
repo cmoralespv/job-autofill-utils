@@ -115,9 +115,17 @@ window.selectByTypingFromDropdown = async (
 
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    // confirm selection: check the visible selected value
-    const selectedLabel = container.querySelector('[data-automation-id="selectedItem"] p');
-    console.log("Selected value:", selectedLabel?.textContent)
+    // After pressing enter, wait for selected value to show up
+    let selectedLabel;
+    try {
+      selectedLabel = await waitForElement('[data-automation-id="selectedItem"] [data-automation-id="promptOption"]', 1000);
+    } catch {
+      console.warn("No selected item appeared after typing candidate:", candidate);
+      continue;
+    }
+
+    console.log("Selected label:", selectedLabel?.textContent)
+    
     if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
     // if (selectedLabel && selectedLabel.textContent.trim().length > 0) {
       return; // Match was successful
