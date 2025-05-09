@@ -118,7 +118,8 @@ window.selectByTypingFromDropdown = async (
     // confirm selection: check the visible selected value
     const selectedLabel = container.querySelector('[data-automation-id="promptAriaInstruction"]');
     // if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
-    if (selectedLabel) {
+    console.log("Selected value:", selectedLabel?.textContent)
+    if (selectedLabel && selectedLabel.textContent.trim().length > 0) {
       return; // Match was successful
     } else {
       console.warn("Option not found in large menu:", labelToMatch, "Candidate tried:", candidate);
