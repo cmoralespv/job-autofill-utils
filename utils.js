@@ -44,7 +44,7 @@ window.selectOptionFromMenu = (
 ) => {
   const trigger = container.querySelector(triggerSelector);
   if (!trigger) {
-    console.warn("Dropdown/MultiSelect button or input field not found:", buttonSelector);
+    console.warn("Dropdown/MultiSelect button or input field not found:", triggerSelector);
     return;
   }
   
