@@ -110,6 +110,9 @@ window.selectByTypingFromDropdown = async (
     const match = options.find(opt => opt.textContent.trim().toLowerCase() === candidate.trim().toLowerCase());
 
     if (match) {
+      match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      match.focus();
+      await new Promise(r => setTimeout(r, 100));
       match.click();
       return;
     }
