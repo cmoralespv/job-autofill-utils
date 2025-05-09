@@ -31,6 +31,7 @@ window.fillInputByName = (name, value, container = document) => {
  * @param {string} labelToMatch - Text to match against menu options.
  * @param {Element} [container=document] - Optional container within which to search.
  * @param {string[]} [aliases=[]] - Optional list of alias strings.
+ * @param {boolean} [clickOnly=true] - If true, don’t simulate typing; just click to show options.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
 window.selectOptionFromMenu = (
