@@ -114,8 +114,8 @@ window.dateSetValue = async (el, value) => {
  * Clicks a button using a CSS selector.
  * @param {string} selector - The selector for the button element.
  */
-window.clickButton = (selector) => {
-  const btn = document.querySelector(selector);
+window.clickButton = (selector, container = document) => {
+  const btn = container.querySelector(selector);
   if (btn) btn.click();
   else console.warn("Button not found:", selector);
 };
