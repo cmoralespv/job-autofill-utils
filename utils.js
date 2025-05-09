@@ -41,7 +41,7 @@ window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = docume
   }
   button.click();
   setTimeout(() => {
-    const options = Array.from(container.querySelectorAll(optionSelector));
+    const options = Array.from(document.querySelectorAll(optionSelector)); // document, not container is necessary here.
     console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
     const normalizedLabel = labelToMatch.trim().toLowerCase();
 
