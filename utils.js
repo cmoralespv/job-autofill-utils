@@ -96,7 +96,7 @@ window.selectFromLargeMenuOption = async (
 
   trigger.click();
 
-  const scrollContainer = container.querySelector('[role="listbox"]');
+  const scrollContainer = document.querySelector('[role="listbox"]');
   if (!scrollContainer) {
     console.warn("Scrollable menu container not found.");
     return;
