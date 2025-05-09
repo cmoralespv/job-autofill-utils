@@ -26,9 +26,11 @@ window.fillInputByName = (name, value, container = document) => {
 };
 
 /**
- * Opens a dropdown and selects the matching label.
+ * Opens a dropdown and selects the matching label using direct or alias-based matching.
  * @param {string} buttonSelector - Selector for the button that opens the dropdown.
- * @param {string} labelToMatch - Visible text of the option to select.
+ * @param {string} labelToMatch - Visible text of the option to match.
+ * @param {Element} [container=document] - Optional container within which to search.
+ * @param {Object} [aliases={}] - Optional aliases object mapping normalized labels to arrays of alternate strings.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
 window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = document, aliases = {}, optionSelector = '[role="option"]') => {
