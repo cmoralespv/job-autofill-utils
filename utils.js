@@ -72,7 +72,8 @@ window.selectFromDropdownOption = async (
 };
 
 /**
- * Scrolls through a virtualized menu and selects the matching option using direct or alias-based matching.
+ * Searches a virtualized dropdown menu by typing the main label and any aliases into the input,
+ * and selects the first exact match found.
  * @param {string} triggerSelector - Selector to open the menu (input or button).
  * @param {string} labelToMatch - Label you want to match exactly.
  * @param {Element} [container=document] - Optional DOM container to scope searches.
@@ -94,9 +95,9 @@ window.selectByTypingFromDropdown = async (
 
   trigger.click();
 
-  const candidates = [labelToMatch, ...aliases]
+  const candidates = [labelToMatch, ...aliases];
 
-  for (const candiate of candidates) {
+  for (const candidate of candidates) {
     trigger.value = candidate;
     trigger.dispatchEvent(new Event("input", {bubbles: true }));
 
