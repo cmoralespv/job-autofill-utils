@@ -27,35 +27,27 @@ window.fillInputByName = (name, value, container = document) => {
 
 /**
  * Opens a dropdown or multiselect and selects the matching option using direct or alias-based matching.
- * @param {string} triggerSelector - Selector for the button or input that opens the menu.
+ * @param {string} buttonSelector - Selector for the button that opens the menu.
  * @param {string} labelToMatch - Text to match against menu options.
  * @param {Element} [container=document] - Optional container within which to search.
  * @param {string[]} [aliases=[]] - Optional list of alias strings.
- * @param {boolean} [clickOnly=true] - If true, don’t simulate typing; just click to show options.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
-window.selectOptionFromMenu = async (
-  triggerSelector, 
+window.selectFromDropDownOption = async (
+  buttonSelector, 
   labelToMatch, 
   container = document, 
   aliases = [], 
-  clickOnly = true,
   optionSelector = '[role="option"]'
 ) => {
-  const trigger = container.querySelector(triggerSelector);
-  if (!trigger) {
-    console.warn("Dropdown/MultiSelect button or input field not found:", triggerSelector);
+  const button = container.querySelector(buttonSelector);
+  if (!button) {
+    console.warn("Dropdown button not found:", buttonSelector);
     return;
   }
   
-  // open dropdown/multiselect
-  trigger.click();
-
-  // optionally simulate input if it's a searchable dropdown
-  if (!clickOnly) {
-    trigger.value = labelToMatch;
-    trigger.dispatchEvent(new Event("input", { bubbles: true }));
-  }
+  // open dropdown
+  button.click();
 
   // Wait for options to appear
   try {
@@ -65,17 +57,34 @@ window.selectOptionFromMenu = async (
     return;
   }
   
-  // fetch and normalize options
-  const options = Array.from(document.querySelectorAll(optionSelector)); // document, not container is necessary here.
+  // fetch and normalize options from full document scope
+  const options = Array.from(document.querySelectorAll(optionSelector));
   console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
-  const normalizedLabel = labelToMatch.trim().toLowerCase();
 
   // direct match
+  const match = findMatchingOption(options, labelToMatch, aliases) 
+  
+  if (match) {
+    match.click();
+  } else {
+    console.warn("Dropdown option not found:", labelToMatch, "Aliases tried:", aliases);
+  }
+};
+
+/**
+ * Finds a matching option based on exact label or aliases.
+ * @param {Element[]} options - The list of <option>-like elements to search.
+ * @param {string} labelToMatch - The main label.
+ * @param {string[]} aliases - A list of fallback alias strings.
+ * @returns {Element|null} - The matching option, or null.
+ */
+findMatchingOption = (options, labelToMatch, aliases = []) => {
+  const normalizedLabel = labelToMatch.trim().toLowerCase();
+
   let match = options.find(opt =>
     opt.textContent.trim().toLowerCase() === normalizedLabel
   );
 
-  // if no direct match, try aliases
   if (!match && Array.isArray(aliases)) {
     for (const alias of aliases) {
       const normalizedAlias = alias.trim().toLowerCase();
@@ -85,13 +94,9 @@ window.selectOptionFromMenu = async (
       if (match) break;
     }
   }
-  
-  if (match) {
-    match.click();
-  } else {
-    console.warn("Dropdown option not found:", labelToMatch, "Aliases tried:", aliases);
-  }
-};
+
+  return match || null;
+}
 
 /**
  * Selects a radio button by name and value.
