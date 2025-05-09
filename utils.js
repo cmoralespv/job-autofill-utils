@@ -31,15 +31,15 @@ window.fillInputByName = (name, value, container = document) => {
  * @param {string} labelToMatch - Visible text of the option to select.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
-window.selectDropdownByLabel = (buttonSelector, labelToMatch, optionSelector = '[role="option"]') => {
-  const button = document.querySelector(buttonSelector);
+window.selectDropdownByLabel = (buttonSelector, labelToMatch, optionSelector = '[role="option"]', container = document) => {
+  const button = container.querySelector(buttonSelector);
   if (!button) {
     console.warn("Dropdown button not found:", buttonSelector);
     return;
   }
   button.click();
   setTimeout(() => {
-    const options = document.querySelectorAll(optionSelector);
+    const options = container.querySelectorAll(optionSelector);
     const match = Array.from(options).find(opt =>
       opt.textContent.trim().toLowerCase() === labelToMatch.trim().toLowerCase()
     );
