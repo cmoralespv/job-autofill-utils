@@ -31,7 +31,7 @@ window.fillInputByName = (name, value, container = document) => {
  * @param {string} labelToMatch - Visible text of the option to select.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
-window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = document, optionSelector = '[role="option"]') => {
+window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = document, aliases = {}, optionSelector = '[role="option"]') => {
   const button = container.querySelector(buttonSelector);
   if (!button) {
     console.warn("Dropdown button not found:", buttonSelector);
@@ -41,7 +41,7 @@ window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = docume
   setTimeout(() => {
     const options = container.querySelectorAll(optionSelector);
     const match = Array.from(options).find(opt =>
-      opt.textContent.trim().toLowerCase() === labelToMatch.trim().toLowerCase()
+      matchDropdownOption(labelToMatch, opt.textContent, aliases)
     );
     if (match) {
       match.click();
@@ -50,6 +50,26 @@ window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = docume
     }
   }, 300);
 };
+
+/**
+ * Checks if a dropdown option matches the label, either directly or via aliases.
+ * @param {string} label - The target label to match.
+ * @param {string} optionText - The visible option text.
+ * @param {Object} aliases - Aliases map.
+ * @returns {boolean} True if a match is found.
+ */
+matchDropdownOption = (label, optionText, aliases = {}) => {
+  const normalizedLabel = label.trim().toLowerCase();
+  const normalizedOption = optionText.trim().toLowerCase();
+
+  if (normalizedOption.includes(normalizedLabel)) return true;
+
+  const aliasList = aliases[normalizedLabel];
+  if (aliasList) {
+    return aliasList.some(alias => normalizedOption.includes(alias));
+  }
+  return false;
+}
 
 /**
  * Selects a radio button by name and value.
