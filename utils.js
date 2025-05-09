@@ -33,7 +33,7 @@ window.fillInputByName = (name, value, container = document) => {
  * @param {string[]} [aliases=[]] - Optional list of alias strings.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
-window.selectFromDropDownOption = async (
+window.selectFromDropdownOption = async (
   buttonSelector, 
   labelToMatch, 
   container = document, 
@@ -79,7 +79,7 @@ window.selectFromDropDownOption = async (
  * @param {string[]} [aliases=[]] - Optional list of aliases to match against.
  * @param {string} [optionSelector='[data-automation-id="promptOption"]'] - Selector for menu options.
  */
-window.searchFromDropDownOption = async (
+window.selectByTypingFromDropdown = async (
   triggerSelector,
   labelToMatch,
   container = document,
