@@ -104,6 +104,7 @@ window.selectByTypingFromDropdown = async (
 
   for (const candidate of candidates) {
     trigger.value = candidate;
+    console.log("Typing candidate:", candidate, "→ Trigger value now:", trigger.value);
     trigger.dispatchEvent(new Event("input", {bubbles: true }));
 
     await new Promise(resolve => setTimeout(resolve, 300));
