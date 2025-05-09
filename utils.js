@@ -117,8 +117,9 @@ window.selectByTypingFromDropdown = async (
     const selectedLabel = container.querySelector('[data-automation-id="promptAriaInstruction"]');
     if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
       return; // Match was successful
+    } else {
+      console.warn("Option not found in large menu:", labelToMatch, "Candidate tried:", candidate);
     }
-    console.warn("Option not found in large menu:", labelToMatch, "Candidate tried:", candidate);
   }
 };
 
