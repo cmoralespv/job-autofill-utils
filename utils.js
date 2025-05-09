@@ -26,20 +26,36 @@ window.fillInputByName = (name, value, container = document) => {
 };
 
 /**
- * Opens a dropdown and selects the matching label using direct or alias-based matching.
- * @param {string} buttonSelector - Selector for the button that opens the dropdown.
- * @param {string} labelToMatch - Visible text of the option to match.
+ * Opens a dropdown or multiselect and selects the matching option using direct or alias-based matching.
+ * @param {string} triggerSelector - Selector for the button or input that opens the menu.
+ * @param {string} labelToMatch - Text to match against menu options.
  * @param {Element} [container=document] - Optional container within which to search.
  * @param {string[]} [aliases=[]] - Optional list of alias strings.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
-window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = document, aliases = [], optionSelector = '[role="option"]') => {
-  const button = container.querySelector(buttonSelector);
-  if (!button) {
-    console.warn("Dropdown button not found:", buttonSelector);
+window.selectOptionFromMenu = (
+  triggerSelector, 
+  labelToMatch, 
+  container = document, 
+  aliases = [], 
+  clickOnly = true,
+  optionSelector = '[role="option"]'
+) => {
+  const trigger = container.querySelector(triggerSelector);
+  if (!trigger) {
+    console.warn("Dropdown/MultiSelect button or input field not found:", buttonSelector);
     return;
   }
-  button.click();
+  
+  // open dropdown/multiselect
+  trigger.click();
+
+   // optionally simulate input if it's a searchable dropdown
+  if (!clickOnly) {
+    trigger.value = labelToMatch;
+    trigger.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+
   setTimeout(() => {
     const options = Array.from(document.querySelectorAll(optionSelector)); // document, not container is necessary here.
     console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
