@@ -116,10 +116,10 @@ window.selectByTypingFromDropdown = async (
     await new Promise(resolve => setTimeout(resolve, 300));
 
     // confirm selection: check the visible selected value
-    const selectedLabel = container.querySelector('[data-automation-id="promptAriaInstruction"]');
-    // if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
+    const selectedLabel = container.querySelector('[data-automation-id="selectedItem"] p');
     console.log("Selected value:", selectedLabel?.textContent)
-    if (selectedLabel && selectedLabel.textContent.trim().length > 0) {
+    if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
+    // if (selectedLabel && selectedLabel.textContent.trim().length > 0) {
       return; // Match was successful
     } else {
       console.warn("Option not found in large menu:", labelToMatch, "Candidate tried:", candidate);
