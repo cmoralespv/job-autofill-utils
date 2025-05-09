@@ -34,7 +34,7 @@ window.fillInputByName = (name, value, container = document) => {
  * @param {boolean} [clickOnly=true] - If true, don’t simulate typing; just click to show options.
  * @param {string} [optionSelector='[role="option"]'] - Selector for the dropdown options.
  */
-window.selectOptionFromMenu = (
+window.selectOptionFromMenu = async (
   triggerSelector, 
   labelToMatch, 
   container = document, 
@@ -51,39 +51,46 @@ window.selectOptionFromMenu = (
   // open dropdown/multiselect
   trigger.click();
 
-   // optionally simulate input if it's a searchable dropdown
+  // optionally simulate input if it's a searchable dropdown
   if (!clickOnly) {
     trigger.value = labelToMatch;
     trigger.dispatchEvent(new Event("input", { bubbles: true }));
   }
 
-  setTimeout(() => {
-    const options = Array.from(document.querySelectorAll(optionSelector)); // document, not container is necessary here.
-    console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
-    const normalizedLabel = labelToMatch.trim().toLowerCase();
+  // Wait for options to appear
+  try {
+    await waitForElement(optionSelector);
+  } catch (err) {
+    console.warn("Timed out waiting for dropdown options:", err.message);
+    return;
+  }
+  
+  // fetch and normalize options
+  const options = Array.from(document.querySelectorAll(optionSelector)); // document, not container is necessary here.
+  console.log("Dropdown options found:", options.map(o => o.textContent.trim()));
+  const normalizedLabel = labelToMatch.trim().toLowerCase();
 
-    // direct match
-    let match = options.find(opt =>
-      opt.textContent.trim().toLowerCase() === normalizedLabel
-    );
+  // direct match
+  let match = options.find(opt =>
+    opt.textContent.trim().toLowerCase() === normalizedLabel
+  );
 
-    // if no direct match, try aliases
-    if (!match && Array.isArray(aliases)) {
-      for (const alias of aliases) {
-        const normalizedAlias = alias.trim().toLowerCase();
-        match = options.find(opt =>
-          opt.textContent.trim().toLowerCase() === normalizedAlias
-        );
-        if (match) break;
-      }
+  // if no direct match, try aliases
+  if (!match && Array.isArray(aliases)) {
+    for (const alias of aliases) {
+      const normalizedAlias = alias.trim().toLowerCase();
+      match = options.find(opt =>
+        opt.textContent.trim().toLowerCase() === normalizedAlias
+      );
+      if (match) break;
     }
-    
-    if (match) {
-      match.click();
-    } else {
-      console.warn("Dropdown option not found:", labelToMatch, "Aliases tried:", aliases);
-    }
-  }, 300);
+  }
+  
+  if (match) {
+    match.click();
+  } else {
+    console.warn("Dropdown option not found:", labelToMatch, "Aliases tried:", aliases);
+  }
 };
 
 /**
@@ -168,11 +175,11 @@ window.delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   * @param {number} timeout - Max wait time in ms.
   * @returns {Promise<Element>} - Resolves with the element or rejects if timeout.
   */
-window.waitForElement = (selector, timeout = 5000) => {
+window.waitForElement = (selector, container = document, timeout = 5000) => {
   return new Promise((resolve, reject) => {
   const start = Date.now();
   const interval = setInterval(() => {
-      const el = document.querySelector(selector);
+      const el = container.querySelector(selector);
       if (el) {
         clearInterval(interval);
         resolve(el);
