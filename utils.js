@@ -48,7 +48,7 @@ window.selectDropdownByLabel = (buttonSelector, labelToMatch, container = docume
     if (match) {
       match.click();
     } else {
-      console.warn("Dropdown option not found:", labelToMatch);
+      console.warn("Dropdown option not found:", labelToMatch, "Aliases tried:", aliases);
     }
   }, 300);
 };
