@@ -66,9 +66,8 @@ matchDropdownOption = (label, optionText, aliases = {}) => {
 
   if (normalizedOption.includes(normalizedLabel)) return true;
 
-  const aliasList = aliases[normalizedLabel];
-  if (aliasList) {
-    return aliasList.some(alias => normalizedOption.includes(alias));
+  if (aliases.length > 0) {
+    return aliases.some(alias => normalizedOption === alias);
   }
   return false;
 }
