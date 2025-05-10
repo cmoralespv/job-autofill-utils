@@ -101,6 +101,7 @@ window.selectByTypingFromDropdown = async (
 
   trigger.click();
   const candidates = [labelToMatch, ...aliases];
+  const unacceptedCandidates = [];
 
   for (const candidate of candidates) {
     const currentPills = getCurrentPills(container);
@@ -127,8 +128,12 @@ window.selectByTypingFromDropdown = async (
       if (!allowMultiple) return;
     } else {
       console.warn("❌ Candidate not accepted:", candidate);
+      unacceptedCandidates.push(candidate);
       continue;
     }
+  }
+  if (unacceptedCandidates.length > 0) {
+    console.warn("Unaccepted candidates:", unaccepted);
   }
 };
 
