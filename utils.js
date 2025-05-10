@@ -133,7 +133,7 @@ window.selectByTypingFromDropdown = async (
     }
   }
   if (unacceptedCandidates.length > 0) {
-    console.warn("Unaccepted candidates:", unaccepted);
+    console.warn("Unaccepted candidates:", unacceptedCandidates);
   }
 };
 
