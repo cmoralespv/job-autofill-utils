@@ -119,12 +119,11 @@ window.selectByTypingFromDropdown = async (
     let selectedLabel;
     try {
       selectedLabel = await waitForElement('[data-automation-id="selectedItem"] [data-automation-id="promptOption"]', container, 1000);
+      console.log("Selected label:", selectedLabel?.textContent)
     } catch {
       console.warn("No selected item appeared after typing candidate:", candidate);
       continue;
     }
-
-    console.log("Selected label:", selectedLabel?.textContent)
     
     if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
     // if (selectedLabel && selectedLabel.textContent.trim().length > 0) {
