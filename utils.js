@@ -120,11 +120,6 @@ window.selectByTypingFromDropdown = async (
     trigger.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true }));
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    // After pressing enter, wait for selected value to show up
-    try {
-      const selectedItem = await waitForElement('[data-automation-id="selectedItem"]', container, 1000);
-      const labelText = selectedItem.querySelector('[data-automation-id="promptOption"]')?.textContent.trim().toLowerCase();
-
     // Re-check pills after typing
     const newPills = getCurrentPills(container);
     if (newPills.includes(candidate.toLowerCase())) {
