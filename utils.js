@@ -117,9 +117,10 @@ window.selectByTypingFromDropdown = async (
     await new Promise(resolve => setTimeout(resolve, 300));
 
     // After pressing enter, wait for selected value to show up
-    let selectedLabel;
+    let existingLabel;
     try {
-      selectedLabel = Array.from(container.querySelectorAll('[data-automation-id="selectedItem"] [data-automation-id="promptOption"]'));
+      existingLabels = Array.from(container.querySelectorAll('[data-automation-id="promptOption"]'))
+        .map(el => el.textContent.trim().toLowerCase());
       if (!selectedLabels.length) throw new Error("No selected items found");
       const lastLabel = selectedLabels[selectedLabels.length - 1];
       console.log("Last selected label:", lastLabel.textContent.trim());
