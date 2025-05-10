@@ -77,13 +77,17 @@ window.selectFromDropdownOption = async (
 };
 
 /**
- * Searches a virtualized dropdown menu by typing the main label and any aliases into the input,
- * and selects the first exact match found.
- * @param {string} triggerSelector - Selector to open the menu (input or button).
- * @param {string} labelToMatch - Label you want to match exactly.
- * @param {Element} [container=document] - Optional DOM container to scope searches.
- * @param {string[]} [aliases=[]] - Optional list of aliases to match against.
- * @param {string} [optionSelector='[data-automation-id="promptOption"]'] - Selector for menu options.
+ * Simulates user input to select one or more options from a virtualized dropdown menu by typing the desired labels.
+ * The function supports both single and multi-select inputs. It types each candidate value (including aliases),
+ * confirms the selection via simulated keyboard events, and validates whether the label was successfully added.
+ * The `labelToMatch` parameter can be either a single string (for single-select fields)
+ * or an array of strings (for multi-select scenarios like skill selection).
+ * @param {string} triggerSelector - CSS selector for the input element that triggers the dropdown.
+ * @param {string|string[]} labelToMatch - The main label(s) to match and select. Accepts a string for single values or an array for multiple.
+ * @param {boolean} [allowMultiple=false] - Whether to allow selecting multiple values. Set to true for multi-select dropdowns.
+ * @param {Element} [container=document] - DOM container to scope the query. Defaults to `document`.
+ * @param {string[]} [aliases=[]] - Optional array of fallback aliases to try if the primary candidate isn't found.
+ * @param {string} [optionSelector='[data-automation-id="promptOption"]'] - Selector used to identify dropdown options.
  */
 window.selectByTypingFromDropdown = async (
   triggerSelector,
@@ -100,7 +104,8 @@ window.selectByTypingFromDropdown = async (
   }
 
   trigger.click();
-  const candidates = [labelToMatch, ...aliases];
+  const labelArray = Array.isArray(labelToMatch) ? labelToMatch : [labelToMatch];
+  const candidates = [...labelArray, ...aliases];
   const unacceptedCandidates = [];
 
   for (const candidate of candidates) {
@@ -165,7 +170,13 @@ findMatchingOption = (options, labelToMatch, aliases = []) => {
   return match || null;
 }
 
-  
+/**
+ * Retrieves the list of currently selected "pill" labels from a multi-select dropdown container.
+ * Pills are identified by elements with IDs starting with "pill-" and a `data-automation-id="selectedItem"` attribute,
+ * and their labels are assumed to be contained in a nested <p> element with `data-automation-id="promptOption"`.
+ * @param {Element} [container=document] - The container in which to search for pills. Defaults to the global document.
+ * @returns {string[]} An array of normalized (lowercased and trimmed) text values from the matched pill labels.
+ */
 const getCurrentPills = (container = document) => {
   return Array.from(container.querySelectorAll('[id^="pill-"][data-automation-id="selectedItem"] p[data-automation-id="promptOption"]'))
     .map(p => p.textContent.trim().toLowerCase());
