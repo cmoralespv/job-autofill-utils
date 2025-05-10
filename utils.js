@@ -88,7 +88,7 @@ window.selectFromDropdownOption = async (
 window.selectByTypingFromDropdown = async (
   triggerSelector,
   labelToMatch,
-  allowMutiple = false,
+  allowMultiple = false,
   container = document,
   aliases = [],
   optionSelector = '[data-automation-id="promptOption"]'
