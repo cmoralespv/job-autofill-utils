@@ -88,6 +88,7 @@ window.selectFromDropdownOption = async (
 window.selectByTypingFromDropdown = async (
   triggerSelector,
   labelToMatch,
+  allowMutiple = false,
   container = document,
   aliases = [],
   optionSelector = '[data-automation-id="promptOption"]'
@@ -118,19 +119,21 @@ window.selectByTypingFromDropdown = async (
     // After pressing enter, wait for selected value to show up
     let selectedLabel;
     try {
-      selectedLabel = await waitForElement('[data-automation-id="selectedItem"] [data-automation-id="promptOption"]', container, 1000);
-      console.log("Selected label:", selectedLabel?.textContent)
+      selectedLabel = Array.from(container.querySelectorAll('[data-automation-id="selectedItem"] [data-automation-id="promptOption"]'));
+      if (!selectedLabels.length) throw new Error("No selected items found");
+      const lastLabel = selectedLabels[selectedLabels.length - 1];
+      console.log("Last selected label:", lastLabel.textContent.trim());
+
+      if (lastLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
+        if (!allowMultiple) return; // ✅ Match found in single mode — exit
+      } else {
+        console.warn("Candidate not found:", candidate);
+        continue;
+      } 
     } catch {
       console.warn("No selected item appeared after typing candidate:", candidate);
       continue;
-    }
-    
-    if (selectedLabel && selectedLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
-    // if (selectedLabel && selectedLabel.textContent.trim().length > 0) {
-      return; // Match was successful
-    } else {
-      console.warn("Option not found in large menu:", labelToMatch, "Candidate tried:", candidate);
-    }
+    }  
   }
 };
 
