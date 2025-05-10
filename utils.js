@@ -118,7 +118,7 @@ window.selectByTypingFromDropdown = async (
     // press enter to confirm selection
     trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     trigger.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true }));
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     // Re-check pills after typing
     const newPills = getCurrentPills(container);
