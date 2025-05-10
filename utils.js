@@ -117,24 +117,30 @@ window.selectByTypingFromDropdown = async (
     await new Promise(resolve => setTimeout(resolve, 300));
 
     // After pressing enter, wait for selected value to show up
-    let existingLabel;
     try {
-      existingLabels = Array.from(container.querySelectorAll('[data-automation-id="promptOption"]'))
-        .map(el => el.textContent.trim().toLowerCase());
-      if (!selectedLabels.length) throw new Error("No selected items found");
-      const lastLabel = selectedLabels[selectedLabels.length - 1];
-      console.log("Last selected label:", lastLabel.textContent.trim());
+      const selectedItem = await waitForElement('[data-automation-id="selectedItem"]', container, 1000);
+      const labelText = selectedItem.querySelector('[data-automation-id="promptOption"]')?.textContent.trim().toLowerCase();
+      // existingLabels = Array.from(container.querySelectorAll('[data-automation-id="promptOption"]'))
+      //  .map(el => el.textContent.trim().toLowerCase());
 
-      if (lastLabel.textContent.toLowerCase().includes(candidate.toLowerCase())) {
-        if (!allowMultiple) return; // ✅ Match found in single mode — exit
-      } else {
-        console.warn("Candidate not found:", candidate);
+      if (!labelText) {
+        console.warn("Selected label has no text content.");
         continue;
-      } 
-    } catch {
+      }
+
+      console.log("Selected label:", labelText);
+
+      if (labelText.includes(candidate.toLowerCase())) {
+        if (!allowMultiple) return; // ✅ Stop if single
+        // else continue to add more
+      } else {
+        console.warn("Selected label does not match candidate:", candidate);
+        continue;
+      }
+    } catch (err) {
       console.warn("No selected item appeared after typing candidate:", candidate);
       continue;
-    }  
+    }
   }
 };
 
