@@ -191,8 +191,8 @@ window.setRadio = (name, value) => {
  * @param {string} selector - CSS selector to locate the checkbox.
  * @param {boolean} checked - Whether the checkbox should be checked.
  */
-window.setCheckboxBySelector = (selector, checked) => {
-  const el = document.querySelector(selector);
+window.setCheckboxBySelector = (selector, checked, container = document) => {
+  const el = container.querySelector(selector);
   if (el) {
     if (el.checked !== checked) {
       el.click();
@@ -208,8 +208,8 @@ window.setCheckboxBySelector = (selector, checked) => {
  * @param {string} name - The name attribute of the checkbox.
  * @param {boolean} checked - Whether the checkbox should be checked.
  */
-window.setCheckboxByName = (name, checked) => {
-  window.setCheckboxBySelector(`input[name="${name}"]`, checked);
+window.setCheckboxByName = (name, checked, container = document) => {
+  window.setCheckboxBySelector(`input[name="${name}"]`, checked, container);
 };
 
 /**
