@@ -107,7 +107,7 @@ window.selectByTypingFromDropdown = async (
     const currentPills = getCurrentPills(container);
     if (!allowMultiple && currentPills.includes(candidate.toLowerCase())) {
       console.log("Already present:", candidate);
-      return;
+      break;
     }
 
     // type and dispatch
@@ -125,13 +125,14 @@ window.selectByTypingFromDropdown = async (
     const newPills = getCurrentPills(container);
     if (newPills.includes(candidate.toLowerCase())) {
       console.log("✅ Added:", candidate);
-      if (!allowMultiple) return;
+      if (!allowMultiple) break;
     } else {
       console.warn("❌ Candidate not accepted:", candidate);
       unacceptedCandidates.push(candidate);
       continue;
     }
   }
+  console.log("💡 Loop finished. Now printing unacceptedCandidates.");
   if (unacceptedCandidates.length > 0) {
     console.warn("Unaccepted candidates:", unacceptedCandidates);
   }
