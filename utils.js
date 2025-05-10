@@ -118,7 +118,7 @@ window.selectByTypingFromDropdown = async (
     // After pressing enter, wait for selected value to show up
     let selectedLabel;
     try {
-      selectedLabel = await waitForElement('[data-automation-id="selectedItem"] [data-automation-id="promptOption"]', 1000);
+      selectedLabel = await waitForElement('[data-automation-id="selectedItem"] [data-automation-id="promptOption"]');
     } catch {
       console.warn("No selected item appeared after typing candidate:", candidate);
       continue;
