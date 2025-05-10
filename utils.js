@@ -100,45 +100,38 @@ window.selectByTypingFromDropdown = async (
   }
 
   trigger.click();
-
   const candidates = [labelToMatch, ...aliases];
 
   for (const candidate of candidates) {
+    const currentPills = getCurrentPills(container);
+    if (!allowMultiple && currentPills.includes(candidate.toLowerCase())) {
+      console.log("Already present:", candidate);
+      return;
+    }
+
+    // type and dispatch
     trigger.value = candidate;
     console.log("Typing candidate:", candidate, "→ Trigger value now:", trigger.value);
     trigger.dispatchEvent(new Event("input", {bubbles: true }));
-
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    // Press Enter to confirm selection
+    // press enter to confirm selection
     trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     trigger.dispatchEvent(new KeyboardEvent("keyup", { key: "Enter", bubbles: true }));
-
     await new Promise(resolve => setTimeout(resolve, 300));
 
     // After pressing enter, wait for selected value to show up
     try {
       const selectedItem = await waitForElement('[data-automation-id="selectedItem"]', container, 1000);
       const labelText = selectedItem.querySelector('[data-automation-id="promptOption"]')?.textContent.trim().toLowerCase();
-      // existingLabels = Array.from(container.querySelectorAll('[data-automation-id="promptOption"]'))
-      //  .map(el => el.textContent.trim().toLowerCase());
 
-      if (!labelText) {
-        console.warn("Selected label has no text content.");
-        continue;
-      }
-
-      console.log("Selected label:", labelText);
-
-      if (labelText.includes(candidate.toLowerCase())) {
-        if (!allowMultiple) return; // ✅ Stop if single
-        // else continue to add more
-      } else {
-        console.warn("Selected label does not match candidate:", candidate);
-        continue;
-      }
-    } catch (err) {
-      console.warn("No selected item appeared after typing candidate:", candidate);
+    // Re-check pills after typing
+    const newPills = getCurrentPills(container);
+    if (newPills.includes(candidate.toLowerCase())) {
+      console.log("✅ Added:", candidate);
+      if (!allowMultiple) return;
+    } else {
+      console.warn("❌ Candidate not accepted:", candidate);
       continue;
     }
   }
@@ -170,6 +163,12 @@ findMatchingOption = (options, labelToMatch, aliases = []) => {
 
   return match || null;
 }
+
+  
+const getCurrentPills = (container = document) => {
+  return Array.from(container.querySelectorAll('[id^="pill-"][data-automation-id="selectedItem"] p[data-automation-id="promptOption"]'))
+    .map(p => p.textContent.trim().toLowerCase());
+};
 
 /**
  * Returns the most recently opened dropdown container (typically a floating menu with role="listbox").
